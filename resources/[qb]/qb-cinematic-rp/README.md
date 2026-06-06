@@ -1,231 +1,152 @@
-# QB Cinematic RP System v1.0.0
+# QB Cinematic RP
 
-**Complete Advanced Mission & Gang/Police System for QBCore**
+Advanced cinematic RP system for FiveM with qb-target integration. Provides a scene director, NPC spawning & management, chair/object interactions, and simple action handlers for cuffing, seating, and combat-like interactions.
 
-## ✅ Features Included
-
-### Core Features
-- ✅ **20 NPCs Auto-Spawn** (Gangs, Police, Civilians)
-- ✅ **Realistic AI Behaviors** with dynamic tasks
-- ✅ **Gang System** with kidnapping and warfare
-- ✅ **Police System** with arrests and jail transport
-- ✅ **Mission System** with multiple mission types
-- ✅ **Vehicle System** with NPC drivers
-- ✅ **Animation System** with dances & scenarios
-- ✅ **Target System** for easy interactions
-- ✅ **Cinematic Mode** for realistic gameplay
-
-### Gang Features
-- 🔫 Armed gang members
-- 🚗 Gang vehicles
-- 💀 Kidnapping mechanics
-- 🔥 Gang wars between factions
-- 🗺️ Territory control
-- 🎯 Gang missions
-
-### Police Features
-- 👮 Police patrol system
-- 🚨 Police chase mechanics
-- 🔐 Arrest system
-- 🔗 Handcuff animations
-- 🏃 Jail transport
-- 📍 Multiple response units
-
-### Mission Types
-1. **Kidnap Mission** - Abduct targets (Reward: $5000)
-2. **Robbery Mission** - Rob stores (Reward: $3000)
-3. **Drive By Mission** - Drive by shooting (Reward: $4000)
-4. **Drug Deal Mission** - Complete deals (Reward: $2000)
-
-## 📦 Installation
-
-### Step 1: Add to server.cfg
-```cfg
-ensure qb-cinematic-rp
-```
-
-### Step 2: Restart Server
-Server will auto-spawn all NPCs, vehicles, and systems.
-
-## 🎮 Keybinds
-
-- **E** - Target nearest NPC
-- **F** - Kidnap targeted NPC
-- **G** - Police chase
-- **H** - Gang war
-
-## 📋 Console Commands
-
-```
-/startmission kidnap - Start kidnap mission
-/startmission robbery - Start robbery mission
-/startmission driveby - Start drive by mission
-/startmission drugdeal - Start drug deal mission
-/completemission - Complete current mission
-/failmission - Fail current mission
-/cancelall - Clear all NPCs and vehicles
-```
-
-## 🔧 Configuration
-
-**Edit `shared/config.lua`:**
-
-```lua
-Config.Settings.maxNPCs = 20              -- Max NPCs
-Config.Settings.maxPolice = 8             -- Max police
-Config.Settings.realisticBehavior = true  -- Realistic AI
-Config.Settings.cinematicMode = true      -- Cinematic effects
-```
-
-## 🏗️ System Architecture
-
-```
-qb-cinematic-rp/
-├── shared/
-│   ├── config.lua (All configuration)
-│   └── utils.lua (Helper functions)
-├── client/
-│   ├── client.lua (Main client)
-│   ├── npc_system.lua (NPC management)
-│   ├── gang_system.lua (Gang features)
-│   ├── police_system.lua (Police features)
-│   ├── target_system.lua (Targeting)
-│   ├── animations.lua (Animations)
-│   ├── vehicle_system.lua (Vehicles)
-│   └── mission_system.lua (Missions)
-└── server/
-    ├── server.lua (Server script)
-    └── events.lua (Server events)
-```
-
-## 📊 Spawn Locations
-
-### Gang Territories
-- **Vagos**: x: 390.0, y: -980.0, z: 29.5
-- **Ballast**: x: -520.0, y: -910.0, z: 29.3
-
-### Police Station
-- x: 460.0, y: -980.0, z: 29.5
-
-### Important Locations
-- Jail Cell: x: 465.0, y: -1010.0, z: 29.5
-- Kidnap Warehouse: x: 350.0, y: -950.0, z: 50.0
-- Gang Hideout: x: 320.0, y: -900.0, z: 40.0
-
-## 🎯 Mission Details
-
-### Kidnap Mission
-- Target an NPC (Press E)
-- Get close to target
-- Press F to kidnap
-- Transport to warehouse
-- Reward: $5000
-
-### Police Chase
-- Police units spawn
-- They chase player
-- Multiple difficulty levels
-- Cinematic effects
-
-### Gang War
-- Rival gangs fight
-- Use for cinematic scenes
-- Damage property possible
-- Multiple NPC combat
-
-## 🎬 Cinematic Features
-
-- Realistic animation sequences
-- Smooth camera work
-- Environmental storytelling
-- Dynamic mission generation
-- Immersive sound design
-- Professional RP scenes
-
-## 🚗 Vehicle System
-
-- **Gang Vehicles**: Oracle, Fugitive
-- **Police Vehicles**: Police, Police2, Police3
-- **NPC Drivers**: Full AI driving
-- **Convoys**: Multi-vehicle formations
-- **Vehicle Chase**: Dynamic pursuits
-
-## 💾 Exports
-
-```lua
--- Get all NPCs
-exports['qb-cinematic-rp']:GetSpawnedNPCs()
-
--- Get all vehicles
-exports['qb-cinematic-rp']:GetSpawnedVehicles()
-
--- Get current target
-exports['qb-cinematic-rp']:GetTargetPed()
-
--- Get nearby NPCs
-exports['qb-cinematic-rp']:GetNearbyNPCs()
-```
-
-## ⚡ Performance
-
-- **Optimized entity management**
-- **Efficient behavior loops**
-- **Smart despawning**
-- **Low memory usage**
-- **0.5-1.5ms per frame** (typical)
-
-## 🐛 Troubleshooting
-
-### NPCs not spawning?
-- Check console for errors
-- Verify config.lua syntax
-- Ensure models exist
-- Check server memory
-
-### Police not responding?
-- Verify police NPC spawned
-- Check faction configuration
-- Restart resource
-
-### Animations not working?
-- Check animation dictionary
-- Verify model compatibility
-- Check PED type (type 4)
-
-## 📝 Console Output
-
-**Expected startup:**
-```
-[Cinematic RP] v1.0.0 Initializing...
-[Cinematic RP] QBCore loaded successfully!
-[Cinematic RP] Spawning 20 NPCs...
-[Cinematic RP] Spawning 7 vehicles...
-[Cinematic RP] System Ready!
-[Cinematic RP] Client script loaded successfully!
-```
-
-## ✅ Compatible With
-
-- ✅ QBCore Framework
-- ✅ Custom frameworks
-- ✅ Standalone servers
-- ✅ RP servers
-- ✅ Development servers
-
-## 📄 License
-
-MIT License - Free to use and modify
-
-## 👨‍💻 Author
-
-**Danger Play Zone** - Advanced QBCore Development
+This README explains setup, usage, commands, events, exports, and troubleshooting for the `qb-cinematic-rp` resource.
 
 ---
 
-**Status: ✅ v1.0.0 Production Ready**
+## Features
 
-**Tested:** QBCore v2.0+, FiveM Build 1311+
+- Scene director with in-game `/scene` command to script simple scenes.
+- NPC spawning with roles/factions (gang, police, civilian, etc).
+- Chair creation and NPC/player seating scenarios.
+- qb-target integration: NPCs and chairs become targetable with Inspect/Cuff/Sit/Punch/Stand actions.
+- Client-side action handlers (Seat, Cuff, Punch) with optional exports for other scripts.
+- Exports and events so other resources can register entities or trigger cinematic actions.
 
-**Last Updated:** 2026-05-24
+---
 
-**For support or issues, check the README and configuration files.**
+## Requirements
+
+- FiveM server
+- qb-target (recommended) — ensure `qb-target` is started before this resource for target registration to work.
+- QBCore (optional) — used only for Utils.Notify if available; scripts fall back to console prints when missing.
+
+---
+
+## Installation
+
+1. Place the resource folder at: `resources/[qb]/qb-cinematic-rp/`
+2. Ensure `qb-target` is started before `qb-cinematic-rp` in your `server.cfg`:
+
+```
+ensure qb-target
+ensure qb-cinematic-rp
+```
+
+3. Start/restart your server.
+
+---
+
+## Usage (Scene Director)
+
+The resource provides a client-side `/scene` command to control simple scene flows. Example commands (in-game chat):
+
+- Start a scene
+  /scene start
+
+- Spawn NPC(s)
+  /scene spawn npc <faction> <count>
+  Example: `/scene spawn npc gang 5`
+
+- Create a chair at your position
+  /scene chair create
+
+- Seat an NPC on a chair
+  /scene sit npc <npcIndex> chair <chairIndex>
+  Example: `/scene sit npc 1 chair 1`
+
+- Cuff an NPC
+  /scene cuff npc <npcIndex>
+
+- Have one NPC punch another
+  /scene punch npc <attackerIndex> npc <targetIndex>
+
+- End scene and cleanup
+  /scene end
+
+Notes:
+- NPC and chair indices are assigned in spawn/create order starting at 1.
+- Scene commands are implemented client-side for rapid prototyping. Move critical actions to server-side events for authoritative behavior.
+
+---
+
+## qb-target Integration
+
+When qb-target is available the resource registers:
+
+- NPC entities: Options include Inspect, Cuff, Seat NPC, Punch, Stand/Remove.
+- Chair models: Player "Sit" option for sitting on chairs.
+
+The integration passes `data.entity` from qb-target to client event handlers so handlers receive the exact targeted entity.
+
+---
+
+## Client Events
+
+These client events are provided (trigger them with `TriggerEvent`):
+
+- `cinematic:client:npcSpawned(npcData)` — fired when the scene director spawns an NPC (contains `entity`, `faction`, `role`, `index`).
+- `cinematic:client:npcDespawned(npcData)` — fired before NPC deletion.
+- `cinematic:client:requestCuff(entity)` — cuff (freeze/block) the ped (client-side).
+- `cinematic:client:seatNPC(entity)` — seat NPC at nearest chair.
+- `cinematic:client:requestPunch(entity)` — trigger punch behavior against entity.
+- `cinematic:client:playerSitOnChair(data)` — called when player uses qb-target Sit on a chair (data.entity = chair).
+
+qb-target specific handlers (receive qb-target's `data` table with `data.entity`):
+- `cinematic:client:inspectTarget`
+- `cinematic:client:cuffTarget`
+- `cinematic:client:seatTarget`
+- `cinematic:client:punchTarget`
+- `cinematic:client:standTarget`
+
+---
+
+## Exports
+
+Exports are available for other client scripts to register entities or call helpers (example names):
+
+- `RegisterNPCWithQbTarget(npcData)` — register an NPC entity with qb-target (npcData should include `.entity`, `.faction`, `.canSit`, etc).
+- `UnregisterNPCFromQbTarget(entity)` — unregister entity.
+- `RegisterAllSpawnedNPCs()` — scan global `spawnedNPCs` table and register entities.
+- `SeatNPCOnNearestChair(entity)` — seat the given NPC.
+- `UnseatNPC(entity)` — unseat the NPC.
+- `CuffPed(entity)` — cuff ped.
+- `UncuffPed(entity)` — uncuff ped.
+- `PunchNPC(entity)` — apply punch behavior/damage.
+
+Usage example:
+
+```lua
+exports['qb-cinematic-rp']:RegisterNPCWithQbTarget({ entity = ped, faction = 'gang', canSit = true })
+```
+
+---
+
+## Configuration
+
+Default settings use `shared/config.lua` in the resource. You can configure NPC models, spawn limits, weapons, locations, and mission definitions there.
+
+---
+
+## Troubleshooting
+
+- "Couldn't find resource qb-cinematic-rp." — Ensure the folder name matches exactly and `fxmanifest.lua` exists at the resource root. The resource name in `server.cfg` must match the folder name.
+- qb-target options not appearing — Make sure `qb-target` is started before this resource (`ensure qb-target` before `ensure qb-cinematic-rp`).
+- Actions not working on NPCs — Confirm NPCs are registered via the global `spawnedNPCs` table or use the `RegisterNPCWithQbTarget` export.
+- Want authoritative server behavior? Move sensitive logic (cuffing, damage, deleting entities) to server-side events and validate permissions.
+
+---
+
+## Extending
+
+- Add role-based behavior (gangster, victim, boss, guard) by supplying `role` in `npcData` and adjusting handlers.
+- Add server-side handlers for syncing cuff/punch state and for permission checks.
+- Register additional chair models or scene objects in the qb-target registration.
+
+---
+
+## License
+
+MIT — free to use and modify. Include attribution if redistributing.
