@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QBCore Video Loading Screen</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="video-loading-container" class="hidden">
+        <!-- Video Background -->
+        <video id="loading-video" class="video-background" autoplay muted loop>
+            <source src="videos/loading.mp4" type="video/mp4">
+        </video>
+        
+        <!-- Dark Overlay -->
+        <div id="overlay" class="overlay"></div>
+        
+        <!-- Content Wrapper -->
+        <div class="loading-content">
+            <!-- Top Section: Server Info -->
+            <div class="server-info-section">
+                <div class="server-header">
+                    <h1 id="server-name" class="server-name">DANGER PLAY ZONE</h1>
+                    <p id="server-motd" class="server-motd">Welcome to our server</p>
+                </div>
+            </div>
+            
+            <!-- Middle Section: Loading Bar & Tips -->
+            <div class="middle-section">
+                <!-- Loading Bar -->
+                <div id="loading-bar-section" class="loading-bar-section">
+                    <div class="loading-bar-container">
+                        <div class="loading-bar-track">
+                            <div id="loading-bar" class="loading-bar"></div>
+                            <div id="loading-bar-shimmer" class="loading-bar-shimmer"></div>
+                        </div>
+                        <div id="progress-text" class="progress-text">0%</div>
+                    </div>
+                </div>
+                
+                <!-- Tips Display -->
+                <div id="tips-section" class="tips-section">
+                    <div class="tips-content">
+                        <div class="tips-header">💡 Tip</div>
+                        <p id="tips-text" class="tips-text">Loading server...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Section: Resources & Status -->
+            <div class="bottom-section">
+                <!-- Resources Loading List -->
+                <div id="resources-container" class="resources-container hidden">
+                    <div class="resources-header">
+                        <span>Loading Resources</span>
+                        <span id="resource-count" class="resource-count">0/0</span>
+                    </div>
+                    <div id="resources-list" class="resources-list">
+                        <!-- Resources added dynamically -->
+                    </div>
+                </div>
+                
+                <!-- Skip Button & Status -->
+                <div class="control-section">
+                    <button id="skip-btn" class="skip-button hidden">
+                        <span>SKIP LOADING</span>
+                        <span class="hint">(Press ESC)</span>
+                    </button>
+                    <div id="status-text" class="status-text">Initializing...</div>
+                </div>
+            </div>
+            
+            <!-- Loading Spinner -->
+            <div class="spinner-container">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
