@@ -3,11 +3,11 @@ local PlayerData = {}
 local InDutyZone = false
 local OnDuty = false
 
-AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     PlayerData = QBCore.Functions.GetPlayerData()
 end)
 
-AddEventHandler('QBCore:Client:OnJobUpdate', function(job)
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
     PlayerData.job = job
 end)
 
@@ -39,21 +39,19 @@ RegisterNetEvent('police-job:client:showDutyMenu')
 AddEventHandler('police-job:client:showDutyMenu', function()
     QBCore.Functions.TriggerCallback('police-job:getDutyStatus', function(isDuty)
         if isDuty then
-            if TriggerEvent('chat:addMessage', {
+            TriggerEvent('chat:addMessage', {
                 color = {255, 0, 0},
                 multiline = true,
                 args = {'Police', 'Press E to leave duty'}
-            }) then
-                OnDuty = true
-            end
+            })
+            OnDuty = true
         else
-            if TriggerEvent('chat:addMessage', {
+            TriggerEvent('chat:addMessage', {
                 color = {0, 255, 0},
                 multiline = true,
                 args = {'Police', 'Press E to join duty'}
-            }) then
-                OnDuty = false
-            end
+            })
+            OnDuty = false
         end
     end)
 end)
@@ -64,6 +62,12 @@ RegisterKeyMapping('toggleduty', 'Toggle Police Duty', 'keyboard', 'E')
 RegisterCommand('toggleduty', function()
     if InDutyZone and PlayerData.job and PlayerData.job.name == 'police' then
         TriggerServerEvent('police-job:server:toggleDuty')
+    else
+        TriggerEvent('chat:addMessage', {
+            color = {255, 0, 0},
+            multiline = true,
+            args = {'Police', 'You must be at police station!'}
+        })
     end
 end, false)
 
@@ -87,4 +91,8 @@ function ApplyUniform(ped, uniform)
     SetPedComponentVariation(ped, 4, uniform.pants_1, uniform.pants_2, 2)
     SetPedComponentVariation(ped, 6, uniform.shoes_1, uniform.shoes_2, 2)
     SetPedComponentVariation(ped, 9, uniform.bproof_1, uniform.bproof_2, 2)
+    
+    -- Give weapons
+    GiveWeaponToPed(ped, GetHashKey('WEAPON_PISTOL'), 120, false, true)
+    GiveWeaponToPed(ped, GetHashKey('WEAPON_NIGHTSTICK'), 1, false, true)
 end
