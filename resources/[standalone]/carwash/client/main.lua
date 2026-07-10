@@ -1,18 +1,24 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = {}
 local CurrentWashLocation = nil
+local isWashing = false
 
-AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     PlayerData = QBCore.Functions.GetPlayerData()
     CreateBlips()
 end)
 
-AddEventHandler('QBCore:Client:OnJobUpdate', function(job)
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
     PlayerData.job = job
 end)
 
 -- Create Blips
 function CreateBlips()
+    if not Config or not Config.CarWashLocations then
+        print('^1[CarWash] ERROR: Config not loaded!^7')
+        return
+    end
+    
     for _, location in ipairs(Config.CarWashLocations) do
         local blip = AddBlipForCoord(location.coords)
         SetBlipSprite(blip, Config.Blip.sprite)
@@ -23,12 +29,22 @@ function CreateBlips()
         AddTextEntryForBlip(blip, location.name)
         SetBlipRoute(blip, true)
     end
+    
+    print('^2[CarWash] Blips created!^7')
 end
 
 -- Car Wash Location Marker
 CreateThread(function()
+    Wait(1000) -- Wait for config to load
+    
     while true do
         Wait(0)
+        
+        if not Config or not Config.CarWashLocations then
+            Wait(500)
+            goto continue
+        end
+        
         local playerCoords = GetEntityCoords(PlayerPedId())
         
         for i, location in ipairs(Config.CarWashLocations) do
@@ -43,10 +59,14 @@ CreateThread(function()
                 DrawText3D(location.coords.x, location.coords.y, location.coords.z + 1.0, '[E] Wash Car - $' .. Config.WashPrice)
                 
                 if IsControlJustPressed(0, 38) then -- E Key
-                    StartCarWash(i)
+                    if not isWashing then
+                        StartCarWash(i)
+                    end
                 end
             end
         end
+        
+        ::continue::
     end
 end)
 
@@ -72,7 +92,6 @@ function DrawText3D(x, y, z, text)
 end
 
 function StartCarWash(locationIndex)
-    local location = Config.CarWashLocations[locationIndex]
     local playerPed = PlayerPedId()
     local vehicle = GetVehiclePedIsIn(playerPed, false)
     
@@ -85,8 +104,13 @@ function StartCarWash(locationIndex)
         return
     end
     
-    -- Start washing
+    isWashing = true
     TriggerServerEvent('carwash:server:washCar')
 end
+
+RegisterNetEvent('carwash:client:washComplete')
+AddEventHandler('carwash:client:washComplete', function()
+    isWashing = false
+end)
 
 print('^2[CarWash]^7 Client Main Loaded!')

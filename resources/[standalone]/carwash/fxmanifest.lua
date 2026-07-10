@@ -10,7 +10,7 @@ shared_scripts {
 }
 
 server_scripts {
-    '@mysql-async/lib/MySQL.lua',
+    '@oxmysql/lib/MySQL.lua',
     'server/main.lua'
 }
 
@@ -19,6 +19,11 @@ client_scripts {
     'client/npc.lua',
     'client/wash.lua',
     'client/effects.lua'
+}
+
+dependencies {
+    'qb-core',
+    'oxmysql'
 }
 
 escrow_ignore {
