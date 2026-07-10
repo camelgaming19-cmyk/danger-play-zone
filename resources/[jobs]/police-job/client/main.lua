@@ -1,23 +1,9 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = {}
 
-AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
-    PlayerData = QBCore.Functions.GetPlayerData()
-    if PlayerData.job.name == 'police' then
-        CreateBlip()
-    end
-end)
-
-AddEventHandler('QBCore:Client:OnJobUpdate', function(job)
-    PlayerData.job = job
-    if job.name == 'police' then
-        CreateBlip()
-    else
-        RemoveBlip()
-    end
-end)
-
-function CreateBlip()
+local function CreateBlip()
+    if not PlayerData.job or PlayerData.job.name ~= 'police' then return end
+    
     local blip = AddBlipForCoord(Config.PoliceDutyLocation.coords)
     SetBlipSprite(blip, Config.Blip.sprite)
     SetBlipDisplay(blip, Config.Blip.display)
@@ -28,9 +14,25 @@ function CreateBlip()
     SetBlipRoute(blip, true)
 end
 
-function RemoveBlip()
-    -- Blip removal logic
+local function RemoveBlip()
+    -- Blip removal logic here
 end
+
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+    PlayerData = QBCore.Functions.GetPlayerData()
+    if PlayerData.job and PlayerData.job.name == 'police' then
+        CreateBlip()
+    end
+end)
+
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(job)
+    PlayerData.job = job
+    if job.name == 'police' then
+        CreateBlip()
+    else
+        RemoveBlip()
+    end
+end)
 
 RegisterNetEvent('police-job:client:openPoliceMenu')
 AddEventHandler('police-job:client:openPoliceMenu', function()
@@ -44,7 +46,15 @@ end)
 
 RegisterNetEvent('police-job:client:dutyOff')
 AddEventHandler('police-job:client:dutyOff', function()
-    -- Remove uniform and weapons
     local playerPed = PlayerPedId()
     ClearAllPedProps(playerPed)
+end)
+
+RegisterNetEvent('police-job:client:showMenu')
+AddEventHandler('police-job:client:showMenu', function()
+    TriggerEvent('chat:addMessage', {
+        color = {0, 255, 0},
+        multiline = true,
+        args = {'Police Menu', 'Commands: /duty, /arrest, /policewardrobe'}
+    })
 end)
