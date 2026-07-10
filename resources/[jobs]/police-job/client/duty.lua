@@ -2,6 +2,7 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = {}
 local InDutyZone = false
 local OnDuty = false
+local MenuOpen = false
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     PlayerData = QBCore.Functions.GetPlayerData()
@@ -25,7 +26,7 @@ CreateThread(function()
             
             if distToDuty < Config.PoliceDutyLocation.radius then
                 InDutyZone = true
-                if distToDuty < 2 then
+                if distToDuty < 2 and not MenuOpen then
                     TriggerEvent('police-job:client:showDutyMenu')
                 end
             else
@@ -38,30 +39,22 @@ end)
 RegisterNetEvent('police-job:client:showDutyMenu')
 AddEventHandler('police-job:client:showDutyMenu', function()
     QBCore.Functions.TriggerCallback('police-job:getDutyStatus', function(isDuty)
-        if isDuty then
-            TriggerEvent('chat:addMessage', {
-                color = {255, 0, 0},
-                multiline = true,
-                args = {'Police', 'Press E to leave duty'}
-            })
-            OnDuty = true
-        else
-            TriggerEvent('chat:addMessage', {
-                color = {0, 255, 0},
-                multiline = true,
-                args = {'Police', 'Press E to join duty'}
-            })
-            OnDuty = false
-        end
+        OnDuty = isDuty
+        
+        TriggerEvent('chat:addMessage', {
+            color = {0, 255, 0},
+            multiline = true,
+            args = {'Police', isDuty and 'Press E to LEAVE DUTY' or 'Press E to JOIN DUTY'}
+        })
     end)
 end)
 
--- Press E to toggle duty
+-- Press E to toggle duty with menu
 RegisterKeyMapping('toggleduty', 'Toggle Police Duty', 'keyboard', 'E')
 
 RegisterCommand('toggleduty', function()
     if InDutyZone and PlayerData.job and PlayerData.job.name == 'police' then
-        TriggerServerEvent('police-job:server:toggleDuty')
+        OpenDutyMenu()
     else
         TriggerEvent('chat:addMessage', {
             color = {255, 0, 0},
@@ -70,6 +63,64 @@ RegisterCommand('toggleduty', function()
         })
     end
 end, false)
+
+function OpenDutyMenu()
+    MenuOpen = true
+    QBCore.Functions.TriggerCallback('police-job:getDutyStatus', function(isDuty)
+        OnDuty = isDuty
+        
+        local menuOptions = {
+            {
+                header = "Police Duty",
+                isMenuHeader = true,
+            },
+        }
+        
+        if OnDuty then
+            table.insert(menuOptions, {
+                header = "Leave Duty",
+                txt = "Go off duty and remove uniform",
+                params = {
+                    event = "police-job:client:leaveDuty"
+                }
+            })
+        else
+            table.insert(menuOptions, {
+                header = "Join Duty",
+                txt = "Put on uniform and go on duty",
+                params = {
+                    event = "police-job:client:joinDuty"
+                }
+            })
+        end
+        
+        table.insert(menuOptions, {
+            header = "Close",
+            txt = "Close Menu",
+            params = {
+                event = "police-job:client:closeMenu"
+            }
+        })
+        
+        exports['qb-menu']:openMenu(menuOptions)
+        MenuOpen = false
+    end)
+end
+
+RegisterNetEvent('police-job:client:joinDuty')
+AddEventHandler('police-job:client:joinDuty', function()
+    TriggerServerEvent('police-job:server:toggleDuty')
+end)
+
+RegisterNetEvent('police-job:client:leaveDuty')
+AddEventHandler('police-job:client:leaveDuty', function()
+    TriggerServerEvent('police-job:server:toggleDuty')
+end)
+
+RegisterNetEvent('police-job:client:closeMenu')
+AddEventHandler('police-job:client:closeMenu', function()
+    exports['qb-menu']:closeMenu()
+end)
 
 RegisterNetEvent('police-job:client:changeUniform')
 AddEventHandler('police-job:client:changeUniform', function()
